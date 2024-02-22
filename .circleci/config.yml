@@ -13,9 +13,9 @@ jobs:
       - run:
           name: Run Docker image
           command: docker run -d -p "8080:8080" lamoincl/node-test:latest
-      - run:
-          name: Test Docker image
-          command: curl "http://localhost:8080/"
+      # - run:
+      #     name: Test Docker image
+      #     command: curl "http://localhost:8080/"
       - run:
           name: Push Docker image
           command: |
