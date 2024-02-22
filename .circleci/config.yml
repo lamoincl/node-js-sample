@@ -1,0 +1,30 @@
+version: '2.1'
+
+
+jobs:
+  build_test_push:
+    machine:
+      image: ubuntu-2204:current
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run: 
+        name: Build Docker image
+        command: docker build -t lamoincl/node-test:latest .
+      - run:
+        name: Run Docker image
+        command: docker run -d -p "8080:8080" lamoincl/node-test:latest
+      - run:
+        name: Test Docker image
+        command: curl "http://localhost:8080/"
+      - run:
+        name: Push Docker image
+        command: |
+          echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+          docker push lamoincl/node-test:latest
+    
+
+workflows:
+  build_and_push:
+    jobs:
+      - build_test_push
